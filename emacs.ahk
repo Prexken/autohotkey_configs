@@ -54,6 +54,8 @@ is_target()
   IfWinActive,ahk_class PX_WINDOW_CLASS ;;sublime text
     Return 1 
 
+  if (GetKeyState("RWin")) 
+    Return 1
 
 ; IfWinActive,ahk_class SWT_Window0 ; Eclipse
 ; Return 1
@@ -174,6 +176,13 @@ kill_emacs()
   Return
 }
 
+select_all()
+{
+  global is_pre_x = 0
+  Send ^a
+  Return
+}
+
 move_beginning_of_line()
 {
   global
@@ -284,8 +293,12 @@ scroll_down()
 ^h::
   If is_target()
     Send %A_ThisHotkey%
-  Else
-    delete_backward_char()
+  Else{
+    if is_pre_x
+      select_all()
+    else
+      delete_backward_char()
+  }
   Return
 ^k::
   If is_target()
